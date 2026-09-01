@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Auto Shop Sales &amp; Inventory System — RamRam Dev</title>
+<meta name="description" content="A complete offline desktop app for auto-parts sales, purchasing, receiving, and inventory management. No subscription, no internet required." />
+<link rel="icon" href="images/login-title.png" />
+<style>
+  :root {
+    --ink: #1f2430;
+    --muted: #5b6472;
+    --line: #e4e7ec;
+    --accent: #2b5fd9;
+    --accent-2: #0acf97;
+    --bg: #ffffff;
+    --band: #0f1b3d;
+    --band-2: #1a2a5e;
+    --band-text: #eef1fb;
+    --soft: #f6f8fb;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: var(--accent); text-decoration: none; }
+  .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+
+  /* Nav */
+  nav.topnav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(15, 27, 61, 0.96);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  nav.topnav .container { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand img { height: 28px; width: auto; }
+  .brand span { color: #fff; font-weight: 700; font-size: 15px; letter-spacing: -0.01em; }
+  .navlinks { display: flex; gap: 28px; }
+  .navlinks a { color: #c7cff2; font-size: 14px; font-weight: 500; }
+  .navlinks a:hover { color: #fff; }
+  .nav-cta {
+    background: var(--accent-2); color: #06331f !important; font-weight: 700;
+    padding: 9px 18px; border-radius: 8px; font-size: 14px;
+  }
+  .nav-cta:hover { background: #0bd9a2; }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(160deg, var(--band) 0%, var(--band-2) 60%, #23367a 100%);
+    color: var(--band-text);
+    padding: 72px 0 0;
+    overflow: hidden;
+  }
+  .hero-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+    padding-bottom: 64px;
+  }
+  .eyebrow {
+    text-transform: uppercase; letter-spacing: 0.14em; font-size: 12px; font-weight: 700;
+    color: #8fd6c1; margin: 0 0 14px;
+  }
+  .hero h1 { font-size: 40px; font-weight: 800; line-height: 1.15; margin: 0 0 18px; letter-spacing: -0.01em; }
+  .hero p.lead { color: #c7cff2; font-size: 16px; max-width: 480px; margin: 0 0 28px; }
+  .hero-logo { max-width: 380px; margin-bottom: 22px; border-radius: 8px; }
+  .cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 24px; border-radius: 9px; font-weight: 700; font-size: 14.5px;
+    border: 1px solid transparent; cursor: pointer;
+  }
+  .btn-primary { background: var(--accent-2); color: #06331f; }
+  .btn-primary:hover { background: #0bd9a2; }
+  .btn-outline { background: transparent; color: #fff; border-color: rgba(255,255,255,0.35); }
+  .btn-outline:hover { border-color: #fff; }
+  .hero-shot {
+    border-radius: 12px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.45), 0 2px 0 rgba(255,255,255,0.06) inset;
+    border: 1px solid rgba(255,255,255,0.12);
+    transform: perspective(1200px) rotateY(-6deg) rotateX(2deg);
+  }
+  .stat-strip {
+    border-top: 1px solid rgba(255,255,255,0.12);
+    padding: 22px 0;
+  }
+  .stat-strip .container { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 18px; }
+  .stat { text-align: center; flex: 1; min-width: 130px; }
+  .stat b { display: block; font-size: 22px; color: #fff; }
+  .stat span { font-size: 12.5px; color: #a9b4de; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* Section headers */
+  section { padding: 80px 0; }
+  .section-head { text-align: center; max-width: 620px; margin: 0 auto 48px; }
+  .section-head .eyebrow { color: var(--accent); }
+  .section-head h2 { font-size: 30px; font-weight: 800; margin: 0 0 12px; letter-spacing: -0.01em; }
+  .section-head p { color: var(--muted); font-size: 15.5px; margin: 0; }
+
+  /* Features */
+  .feat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .feat-card {
+    background: var(--soft); border: 1px solid var(--line); border-radius: 12px;
+    padding: 26px 22px;
+  }
+  .feat-icon {
+    width: 42px; height: 42px; border-radius: 10px; background: #e8edfb; color: var(--accent);
+    display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 14px;
+  }
+  .feat-card h3 { font-size: 15.5px; margin: 0 0 6px; }
+  .feat-card p { font-size: 13.5px; color: var(--muted); margin: 0; }
+
+  /* Screenshots */
+  .shots-wrap { background: var(--soft); }
+  .shot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .shot-card {
+    background: #fff; border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+    box-shadow: 0 6px 18px rgba(15,27,61,0.06);
+    cursor: zoom-in;
+  }
+  .shot-card .shot-img-wrap { aspect-ratio: 16/10; overflow: hidden; background: #0f1b3d; }
+  .shot-card img { width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform .3s ease; }
+  .shot-card:hover img { transform: scale(1.04); }
+  .shot-cap { padding: 12px 16px; }
+  .shot-cap b { font-size: 13.5px; display: block; }
+  .shot-cap span { font-size: 12px; color: var(--muted); }
+
+  /* Why band */
+  .why {
+    background: linear-gradient(135deg, var(--band) 0%, #1a2a5e 100%);
+    color: var(--band-text);
+  }
+  .why .section-head h2 { color: #fff; }
+  .why .section-head p { color: #c7cff2; }
+  .why .section-head .eyebrow { color: #8fd6c1; }
+  .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .why-card {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px; padding: 26px 22px;
+  }
+  .why-card h3 { font-size: 15.5px; margin: 0 0 8px; color: #fff; }
+  .why-card p { font-size: 13.5px; color: #b9c3ea; margin: 0; }
+
+  /* CTA band */
+  .cta-band { text-align: center; padding: 76px 0; }
+  .cta-band h2 { font-size: 28px; font-weight: 800; margin: 0 0 14px; }
+  .cta-band p { color: var(--muted); margin: 0 0 28px; }
+
+  /* Footer */
+  footer { background: var(--band); color: #b9c3ea; padding: 46px 0 28px; }
+  .footer-grid { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 24px; }
+  .footer-brand { display: flex; align-items: center; gap: 12px; }
+  .footer-badge { height: 46px; width: auto; }
+  .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+  .footer-links a { color: #b9c3ea; font-size: 13.5px; }
+  .footer-links a:hover { color: #fff; }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1); margin-top: 32px; padding-top: 20px;
+    font-size: 12.5px; color: #8492c4; text-align: center;
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed; inset: 0; background: rgba(10,14,30,0.92);
+    display: none; align-items: center; justify-content: center; z-index: 100; padding: 32px;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+  .lightbox-close {
+    position: absolute; top: 22px; right: 28px; color: #fff; font-size: 30px;
+    background: none; border: none; cursor: pointer; line-height: 1;
+  }
+
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-shot { transform: none; }
+    .feat-grid { grid-template-columns: repeat(2, 1fr); }
+    .shot-grid { grid-template-columns: repeat(2, 1fr); }
+    .why-grid { grid-template-columns: 1fr; }
+    .navlinks { display: none; }
+  }
+  @media (max-width: 560px) {
+    .feat-grid, .shot-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+
+  <nav class="topnav">
+    <div class="container">
+      <div class="brand">
+        <span>Auto Shop Sales &amp; Inventory System</span>
+      </div>
+      <div class="navlinks">
+        <a href="#features">Features</a>
+        <a href="#screenshots">Screenshots</a>
+        <a href="#why">Why Us</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <a class="nav-cta" href="#contact">Get Started</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <p class="eyebrow">Desktop App · Windows</p>
+        <img class="hero-logo" src="images/login-title.png" alt="Sales &amp; Inventory System" />
+        <h1>Run your auto parts shop from one screen.</h1>
+        <p class="lead">
+          Purchasing, receiving, inventory, sales orders, and reporting — built for auto-parts sellers and repair
+          shops. Works fully offline, with no subscription and no internet connection required.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#contact">Get Started</a>
+          <a class="btn btn-outline" href="#screenshots">See it in action</a>
+        </div>
+      </div>
+      <div>
+        <img class="hero-shot" src="images/ss1.png" alt="Dashboard screenshot" />
+      </div>
+    </div>
+    <div class="stat-strip">
+      <div class="container">
+        <div class="stat"><b>100%</b><span>Offline &amp; Local</span></div>
+        <div class="stat"><b>EN / AR</b><span>Bilingual</span></div>
+        <div class="stat"><b>Multi-User</b><span>Role Permissions</span></div>
+        <div class="stat"><b>0</b><span>Subscription Fees</span></div>
+      </div>
+    </div>
+  </header>
+
+  <section id="features">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Everything In One Place</p>
+        <h2>Built for the full parts lifecycle</h2>
+        <p>From purchase order to sale, every step is tracked, confirmable, and reversible-by-design — not a spreadsheet held together with formulas.</p>
+      </div>
+      <div class="feat-grid">
+        <div class="feat-card">
+          <div class="feat-icon">▤</div>
+          <h3>Purchase Orders</h3>
+          <p>Create, approve, and track purchase orders with suppliers, currencies, and revision history.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">▥</div>
+          <h3>Goods Receiving</h3>
+          <p>Receive stock against a PO with partial receipts, landed-cost factor, and foreign/local charges.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">◨</div>
+          <h3>Inventory Tracking</h3>
+          <p>Real-time stock levels, low-stock alerts, and a full movement history for every single item.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">▧</div>
+          <h3>Sales &amp; Quotations</h3>
+          <p>Bilingual quotations and sales orders with custom pricing, discounts, and printable invoices.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">◧</div>
+          <h3>Adjustments &amp; Returns</h3>
+          <p>Correct stock counts and process customer returns, each fully logged against the item's history.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">▦</div>
+          <h3>Reports &amp; Exports</h3>
+          <p>Purchase, sales, and inventory reports with item-level detail and one-click Excel export.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">◫</div>
+          <h3>Roles &amp; Permissions</h3>
+          <p>Give every staff member exactly the access they need — down to individual page actions.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">◩</div>
+          <h3>Activity Log</h3>
+          <p>Every create, edit, and confirm action is recorded — who did what, and when.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="screenshots" class="shots-wrap">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">A Closer Look</p>
+        <h2>See the app in action</h2>
+        <p>Real screens from the actual application — click any screenshot to enlarge.</p>
+      </div>
+      <div class="shot-grid" id="shotGrid">
+        <div class="shot-card" data-full="images/ss1.png">
+          <div class="shot-img-wrap"><img src="images/ss1.png" alt="Dashboard" /></div>
+          <div class="shot-cap"><b>Dashboard</b><span>KPIs, low stock, and sales trends at a glance</span></div>
+        </div>
+        <div class="shot-card" data-full="images/ss2.png">
+          <div class="shot-img-wrap"><img src="images/ss2.png" alt="New Purchase Order" /></div>
+          <div class="shot-cap"><b>Purchase Orders</b><span>Create and price a new order to a supplier</span></div>
+        </div>
+        <div class="shot-card" data-full="images/ss3.png">
+          <div class="shot-img-wrap"><img src="images/ss3.png" alt="Create GRV" /></div>
+          <div class="shot-cap"><b>Goods Receiving</b><span>Receive items against an open purchase order</span></div>
+        </div>
+        <div class="shot-card" data-full="images/ss4.png">
+          <div class="shot-img-wrap"><img src="images/ss4.png" alt="Item Masterlist" /></div>
+          <div class="shot-cap"><b>Item Masterlist</b><span>Every part, its cost, retail price, and stock</span></div>
+        </div>
+        <div class="shot-card" data-full="images/ss6.png">
+          <div class="shot-img-wrap"><img src="images/ss6.png" alt="New Sales Order" /></div>
+          <div class="shot-cap"><b>Sales Orders</b><span>Custom pricing and discounts, line by line</span></div>
+        </div>
+        <div class="shot-card" data-full="images/ss7.png">
+          <div class="shot-img-wrap"><img src="images/ss7.png" alt="Sales Invoice" /></div>
+          <div class="shot-cap"><b>Bilingual Invoices</b><span>Print-ready documents in English and Arabic</span></div>
+        </div>
+        <div class="shot-card" data-full="images/ss5.png">
+          <div class="shot-img-wrap"><img src="images/ss5.png" alt="Quotation" /></div>
+          <div class="shot-cap"><b>Quotations</b><span>Quote a customer, then convert straight to a sale</span></div>
+        </div>
+        <div class="shot-card" data-full="images/ss8.png">
+          <div class="shot-img-wrap"><img src="images/ss8.png" alt="Permissions" /></div>
+          <div class="shot-cap"><b>Roles &amp; Permissions</b><span>Fine-grained access control per staff role</span></div>
+        </div>
+        <div class="shot-card" data-full="images/ss9.png">
+          <div class="shot-img-wrap"><img src="images/ss9.png" alt="Activity Log" /></div>
+          <div class="shot-cap"><b>Activity Log</b><span>A full audit trail of every action taken</span></div>
+        </div>
+        <div class="shot-card" data-full="images/ss10.png">
+          <div class="shot-img-wrap"><img src="images/ss10.png" alt="Movement History" /></div>
+          <div class="shot-cap"><b>Movement History</b><span>Trace exactly how a part's stock level changed</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="why" class="why">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Why This App</p>
+        <h2>Your data stays yours</h2>
+        <p>No cloud account, no monthly fee, and nothing leaves your computer unless you export it yourself.</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-card">
+          <h3>Fully Offline</h3>
+          <p>Everything runs locally — no internet connection is required to use any feature of the app, ever.</p>
+        </div>
+        <div class="why-card">
+          <h3>Private By Design</h3>
+          <p>Your business data is stored locally in your own database file. Nothing is transmitted to us or anyone else.</p>
+        </div>
+        <div class="why-card">
+          <h3>Multi-PC Ready</h3>
+          <p>Optionally share one database across several PCs on the same shop network — no cloud subscription needed.</p>
+        </div>
+        <div class="why-card">
+          <h3>No Subscription</h3>
+          <p>Install it once. There's no recurring fee holding your own business records hostage.</p>
+        </div>
+        <div class="why-card">
+          <h3>Bilingual Interface</h3>
+          <p>Switch the entire app — including printed documents — between English and Arabic at any time.</p>
+        </div>
+        <div class="why-card">
+          <h3>Built for Auto Parts</h3>
+          <p>Vehicle records, part cross-referencing, and workflows shaped around how an auto shop actually runs.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band" id="contact">
+    <div class="container">
+      <h2>Ready to run your shop from one screen?</h2>
+      <p>Get in touch with RamRam Dev to get set up.</p>
+      <div class="cta-row" style="justify-content:center">
+        <a class="btn btn-primary" style="background:var(--accent);color:#fff" href="https://play.google.com/store/apps/dev?id=4673213010085861192" target="_blank" rel="noopener">Visit Developer Profile</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img class="footer-badge" src="images/bottom-developed-by.png" alt="Developed by RamRam Dev" />
+        </div>
+        <div class="footer-links">
+          <a href="https://monbutiong.github.io/privacy-policy/auto-shop-sales-and-inventory.html" target="_blank" rel="noopener">Privacy Policy</a>
+          <a href="https://play.google.com/store/apps/dev?id=4673213010085861192" target="_blank" rel="noopener">Developer Profile</a>
+          <a href="#features">Features</a>
+          <a href="#screenshots">Screenshots</a>
+        </div>
+      </div>
+      <div class="footer-bottom">© 2026 RamRam Dev — Auto Shop Sales &amp; Inventory System. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+    <img id="lightboxImg" src="" alt="Enlarged screenshot" />
+  </div>
+
+  <script>
+    var lightbox = document.getElementById('lightbox');
+    var lightboxImg = document.getElementById('lightboxImg');
+    document.getElementById('shotGrid').addEventListener('click', function (e) {
+      var card = e.target.closest('.shot-card');
+      if (!card) return;
+      lightboxImg.src = card.getAttribute('data-full');
+      lightbox.classList.add('open');
+    });
+    function closeLightbox() { lightbox.classList.remove('open'); lightboxImg.src = ''; }
+    document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeLightbox(); });
+  </script>
+
+</body>
+</html>
