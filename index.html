@@ -7,8 +7,9 @@
 <meta name="description" content="A complete offline desktop app for auto-parts sales, purchasing, receiving, and inventory management. No subscription, no internet required." />
 <link rel="icon" href="images/login-title.png" />
 <script>
-  /* Set language/direction before first paint to avoid a layout flash. */
+  /* Set language/direction + enable JS-only styles before first paint (avoids a flash). */
   (function () {
+    document.documentElement.classList.add("js");
     try {
       var nav = (navigator.language || "").toLowerCase();
       var lang = localStorage.getItem("siteLang") || (nav.indexOf("ar") === 0 ? "ar" : "en");
@@ -74,7 +75,12 @@
 
   /* Hero */
   .hero {
-    background: linear-gradient(160deg, var(--band) 0%, var(--band-2) 60%, #23367a 100%);
+    position: relative;
+    background-color: var(--band);
+    background-image: linear-gradient(160deg, rgb(10 10 10 / 93%) 0%, rgb(57 59 67 / 91%) 50%, rgb(0 0 0 / 90%) 100%), url(images/shop-banner-background.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     color: var(--band-text);
     padding: 72px 0 0;
     overflow: hidden;
@@ -209,6 +215,102 @@
     .hero h1 { font-size: 30px; }
   }
 
+  /* ---- Motion & micro-interactions ---- */
+  nav.topnav { transition: background .3s ease, box-shadow .3s ease; }
+  nav.topnav.scrolled { background: rgba(15,27,61,0.98); box-shadow: 0 6px 24px rgba(0,0,0,0.28); }
+
+  .navlinks a { position: relative; }
+  .navlinks a::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px;
+    background: var(--accent-2); border-radius: 2px;
+    transform: scaleX(0); transition: transform .25s ease;
+  }
+  .navlinks a:hover::after { transform: scaleX(1); }
+
+  .lang-toggle { transition: color .2s ease, border-color .2s ease, background .2s ease; }
+  .lang-toggle:hover { background: rgba(255,255,255,0.08); }
+
+  .nav-cta { transition: background .2s ease, transform .16s ease, box-shadow .2s ease; }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(10,207,151,0.30); }
+
+  .btn { transition: background .2s ease, border-color .2s ease, transform .16s ease, box-shadow .2s ease; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn:active { transform: translateY(0); }
+  .btn-primary:hover { box-shadow: 0 12px 26px rgba(10,207,151,0.32); }
+
+  .feat-card { transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+  .feat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 32px rgba(15,27,61,0.10);
+    border-color: #cdd7ee;
+  }
+  .feat-icon { transition: transform .25s ease, background .25s ease; }
+  .feat-card:hover .feat-icon { transform: scale(1.08) rotate(-4deg); background: #dbe4fb; }
+
+  .shot-card { transition: transform .25s ease, box-shadow .25s ease; }
+  .shot-card:hover { transform: translateY(-5px); box-shadow: 0 18px 40px rgba(15,27,61,0.16); }
+
+  .why-card { transition: transform .25s ease, background .25s ease, border-color .25s ease; }
+  .why-card:hover {
+    transform: translateY(-4px);
+    background: rgba(255,255,255,0.10);
+    border-color: rgba(255,255,255,0.24);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html.js .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1);
+    }
+    html.js .reveal.in { opacity: 1; transform: none; }
+
+    @keyframes heroRise {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes heroShotRise {
+      from { opacity: 0; transform: translateY(30px) scale(0.96); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes heroFloat {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+    .hero .eyebrow,
+    .hero-logo,
+    .hero h1,
+    .hero p.lead,
+    .hero .cta-row { animation: heroRise .7s cubic-bezier(.22,.61,.36,1) both; }
+    .hero .eyebrow { animation-delay: .06s; }
+    .hero-logo     { animation-delay: .14s; }
+    .hero h1       { animation-delay: .24s; }
+    .hero p.lead   { animation-delay: .34s; }
+    .hero .cta-row { animation-delay: .44s; }
+
+    .hero-shot-wrap {
+      animation: heroShotRise .8s cubic-bezier(.22,.61,.36,1) .3s both,
+                 heroFloat 6s ease-in-out 1.6s infinite;
+    }
+
+    .stat-strip .stat { animation: heroRise .6s cubic-bezier(.22,.61,.36,1) both; }
+    .stat-strip .stat:nth-child(1) { animation-delay: .52s; }
+    .stat-strip .stat:nth-child(2) { animation-delay: .60s; }
+    .stat-strip .stat:nth-child(3) { animation-delay: .68s; }
+    .stat-strip .stat:nth-child(4) { animation-delay: .76s; }
+  }
+
+  @media (prefers-reduced-motion: no-preference) and (max-width: 900px) {
+    .hero-shot-wrap { animation: heroShotRise .8s cubic-bezier(.22,.61,.36,1) .3s both; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .feat-card:hover, .shot-card:hover, .why-card:hover,
+    .btn:hover, .nav-cta:hover { transform: none; }
+    .shot-card:hover img { transform: none; }
+    .feat-card:hover .feat-icon { transform: none; }
+  }
+
   /* ---- Arabic / RTL ---- */
   [dir="rtl"] body {
     font-family: "Cairo", "Segoe UI", Tahoma, "Geeza Pro", "Arabic Typesetting", sans-serif;
@@ -269,7 +371,7 @@
           <a class="btn btn-outline" href="#screenshots" data-i18n="hero_cta_secondary">See it in action</a>
         </div>
       </div>
-      <div>
+      <div class="hero-shot-wrap">
         <img class="hero-shot" src="images/ss1.png" alt="Dashboard screenshot" data-i18n-alt="hero_shot_alt"
              data-src-en="images/ss1.png" data-src-ar="images/arabic/aa1.png" />
       </div>
@@ -286,48 +388,48 @@
 
   <section id="features">
     <div class="container">
-      <div class="section-head">
+      <div class="section-head reveal">
         <p class="eyebrow" data-i18n="feat_eyebrow">Everything In One Place</p>
         <h2 data-i18n="feat_h2">Built for the full parts lifecycle</h2>
         <p data-i18n="feat_p">From purchase order to sale, every step is tracked, confirmable, and reversible-by-design — not a spreadsheet held together with formulas.</p>
       </div>
       <div class="feat-grid">
-        <div class="feat-card">
+        <div class="feat-card reveal">
           <div class="feat-icon">▤</div>
           <h3 data-i18n="feat1_t">Purchase Orders</h3>
           <p data-i18n="feat1_d">Create, approve, and track purchase orders with suppliers, currencies, and revision history.</p>
         </div>
-        <div class="feat-card">
+        <div class="feat-card reveal">
           <div class="feat-icon">▥</div>
           <h3 data-i18n="feat2_t">Goods Receiving</h3>
           <p data-i18n="feat2_d">Receive stock against a PO with partial receipts, landed-cost factor, and foreign/local charges.</p>
         </div>
-        <div class="feat-card">
+        <div class="feat-card reveal">
           <div class="feat-icon">◨</div>
           <h3 data-i18n="feat3_t">Inventory Tracking</h3>
           <p data-i18n="feat3_d">Real-time stock levels, low-stock alerts, and a full movement history for every single item.</p>
         </div>
-        <div class="feat-card">
+        <div class="feat-card reveal">
           <div class="feat-icon">▧</div>
           <h3 data-i18n="feat4_t">Sales &amp; Quotations</h3>
           <p data-i18n="feat4_d">Bilingual quotations and sales orders with custom pricing, discounts, and printable invoices.</p>
         </div>
-        <div class="feat-card">
+        <div class="feat-card reveal">
           <div class="feat-icon">◧</div>
           <h3 data-i18n="feat5_t">Adjustments &amp; Returns</h3>
           <p data-i18n="feat5_d">Correct stock counts and process customer returns, each fully logged against the item's history.</p>
         </div>
-        <div class="feat-card">
+        <div class="feat-card reveal">
           <div class="feat-icon">▦</div>
           <h3 data-i18n="feat6_t">Reports &amp; Exports</h3>
           <p data-i18n="feat6_d">Purchase, sales, and inventory reports with item-level detail and one-click Excel export.</p>
         </div>
-        <div class="feat-card">
+        <div class="feat-card reveal">
           <div class="feat-icon">◫</div>
           <h3 data-i18n="feat7_t">Roles &amp; Permissions</h3>
           <p data-i18n="feat7_d">Give every staff member exactly the access they need — down to individual page actions.</p>
         </div>
-        <div class="feat-card">
+        <div class="feat-card reveal">
           <div class="feat-icon">◩</div>
           <h3 data-i18n="feat8_t">Activity Log</h3>
           <p data-i18n="feat8_d">Every create, edit, and confirm action is recorded — who did what, and when.</p>
@@ -338,49 +440,49 @@
 
   <section id="screenshots" class="shots-wrap">
     <div class="container">
-      <div class="section-head">
+      <div class="section-head reveal">
         <p class="eyebrow" data-i18n="shots_eyebrow">A Closer Look</p>
         <h2 data-i18n="shots_h2">See the app in action</h2>
         <p data-i18n="shots_p">Real screens from the actual application — click any screenshot to enlarge.</p>
       </div>
       <div class="shot-grid" id="shotGrid">
-        <div class="shot-card" data-full-en="images/ss1.png" data-full-ar="images/arabic/aa1.png">
+        <div class="shot-card reveal" data-full-en="images/ss1.png" data-full-ar="images/arabic/aa1.png">
           <div class="shot-img-wrap"><img src="images/ss1.png" alt="Dashboard" data-i18n-alt="shot1_title" data-src-en="images/ss1.png" data-src-ar="images/arabic/aa1.png" /></div>
           <div class="shot-cap"><b data-i18n="shot1_title">Dashboard</b><span data-i18n="shot1_desc">KPIs, low stock, and sales trends at a glance</span></div>
         </div>
-        <div class="shot-card" data-full-en="images/ss2.png" data-full-ar="images/arabic/aa2.png">
+        <div class="shot-card reveal" data-full-en="images/ss2.png" data-full-ar="images/arabic/aa2.png">
           <div class="shot-img-wrap"><img src="images/ss2.png" alt="New Purchase Order" data-i18n-alt="shot2_title" data-src-en="images/ss2.png" data-src-ar="images/arabic/aa2.png" /></div>
           <div class="shot-cap"><b data-i18n="shot2_title">Purchase Orders</b><span data-i18n="shot2_desc">Create and price a new order to a supplier</span></div>
         </div>
-        <div class="shot-card" data-full-en="images/ss3.png" data-full-ar="images/arabic/aa3.png">
+        <div class="shot-card reveal" data-full-en="images/ss3.png" data-full-ar="images/arabic/aa3.png">
           <div class="shot-img-wrap"><img src="images/ss3.png" alt="Create GRV" data-i18n-alt="shot3_title" data-src-en="images/ss3.png" data-src-ar="images/arabic/aa3.png" /></div>
           <div class="shot-cap"><b data-i18n="shot3_title">Goods Receiving</b><span data-i18n="shot3_desc">Receive items against an open purchase order</span></div>
         </div>
-        <div class="shot-card" data-full-en="images/ss4.png" data-full-ar="images/arabic/aa4.png">
+        <div class="shot-card reveal" data-full-en="images/ss4.png" data-full-ar="images/arabic/aa4.png">
           <div class="shot-img-wrap"><img src="images/ss4.png" alt="Item Masterlist" data-i18n-alt="shot4_title" data-src-en="images/ss4.png" data-src-ar="images/arabic/aa4.png" /></div>
           <div class="shot-cap"><b data-i18n="shot4_title">Item Masterlist</b><span data-i18n="shot4_desc">Every part, its cost, retail price, and stock</span></div>
         </div>
-        <div class="shot-card" data-full-en="images/ss6.png" data-full-ar="images/arabic/aa6.png">
+        <div class="shot-card reveal" data-full-en="images/ss6.png" data-full-ar="images/arabic/aa6.png">
           <div class="shot-img-wrap"><img src="images/ss6.png" alt="New Sales Order" data-i18n-alt="shot5_title" data-src-en="images/ss6.png" data-src-ar="images/arabic/aa6.png" /></div>
           <div class="shot-cap"><b data-i18n="shot5_title">Sales Orders</b><span data-i18n="shot5_desc">Custom pricing and discounts, line by line</span></div>
         </div>
-        <div class="shot-card" data-full-en="images/ss7.png" data-full-ar="images/arabic/aa7.png">
+        <div class="shot-card reveal" data-full-en="images/ss7.png" data-full-ar="images/arabic/aa7.png">
           <div class="shot-img-wrap"><img src="images/ss7.png" alt="Sales Invoice" data-i18n-alt="shot6_title" data-src-en="images/ss7.png" data-src-ar="images/arabic/aa7.png" /></div>
           <div class="shot-cap"><b data-i18n="shot6_title">Bilingual Invoices</b><span data-i18n="shot6_desc">Print-ready documents in English and Arabic</span></div>
         </div>
-        <div class="shot-card" data-full-en="images/ss5.png" data-full-ar="images/arabic/aa5.png">
+        <div class="shot-card reveal" data-full-en="images/ss5.png" data-full-ar="images/arabic/aa5.png">
           <div class="shot-img-wrap"><img src="images/ss5.png" alt="Quotation" data-i18n-alt="shot7_title" data-src-en="images/ss5.png" data-src-ar="images/arabic/aa5.png" /></div>
           <div class="shot-cap"><b data-i18n="shot7_title">Quotations</b><span data-i18n="shot7_desc">Quote a customer, then convert straight to a sale</span></div>
         </div>
-        <div class="shot-card" data-full-en="images/ss8.png" data-full-ar="images/ss8.png">
+        <div class="shot-card reveal" data-full-en="images/ss8.png" data-full-ar="images/ss8.png">
           <div class="shot-img-wrap"><img src="images/ss8.png" alt="Permissions" data-i18n-alt="shot8_title" data-src-en="images/ss8.png" data-src-ar="images/ss8.png" /></div>
           <div class="shot-cap"><b data-i18n="shot8_title">Roles &amp; Permissions</b><span data-i18n="shot8_desc">Fine-grained access control per staff role</span></div>
         </div>
-        <div class="shot-card" data-full-en="images/ss9.png" data-full-ar="images/arabic/aa8.png">
+        <div class="shot-card reveal" data-full-en="images/ss9.png" data-full-ar="images/arabic/aa8.png">
           <div class="shot-img-wrap"><img src="images/ss9.png" alt="Activity Log" data-i18n-alt="shot9_title" data-src-en="images/ss9.png" data-src-ar="images/arabic/aa8.png" /></div>
           <div class="shot-cap"><b data-i18n="shot9_title">Activity Log</b><span data-i18n="shot9_desc">A full audit trail of every action taken</span></div>
         </div>
-        <div class="shot-card" data-full-en="images/ss10.png" data-full-ar="images/arabic/aa9.png">
+        <div class="shot-card reveal" data-full-en="images/ss10.png" data-full-ar="images/arabic/aa9.png">
           <div class="shot-img-wrap"><img src="images/ss10.png" alt="Movement History" data-i18n-alt="shot10_title" data-src-en="images/ss10.png" data-src-ar="images/arabic/aa9.png" /></div>
           <div class="shot-cap"><b data-i18n="shot10_title">Movement History</b><span data-i18n="shot10_desc">Trace exactly how a part's stock level changed</span></div>
         </div>
@@ -390,33 +492,33 @@
 
   <section id="why" class="why">
     <div class="container">
-      <div class="section-head">
+      <div class="section-head reveal">
         <p class="eyebrow" data-i18n="why_eyebrow">Why This App</p>
         <h2 data-i18n="why_h2">Your data stays yours</h2>
         <p data-i18n="why_p">No cloud account, no monthly fee, and nothing leaves your computer unless you export it yourself.</p>
       </div>
       <div class="why-grid">
-        <div class="why-card">
+        <div class="why-card reveal">
           <h3 data-i18n="why1_t">Fully Offline</h3>
           <p data-i18n="why1_d">Everything runs locally — no internet connection is required to use any feature of the app, ever.</p>
         </div>
-        <div class="why-card">
+        <div class="why-card reveal">
           <h3 data-i18n="why2_t">Private By Design</h3>
           <p data-i18n="why2_d">Your business data is stored locally in your own database file. Nothing is transmitted to us or anyone else.</p>
         </div>
-        <div class="why-card">
+        <div class="why-card reveal">
           <h3 data-i18n="why3_t">Multi-PC Ready</h3>
           <p data-i18n="why3_d">Optionally share one database across several PCs on the same shop network — no cloud subscription needed.</p>
         </div>
-        <div class="why-card">
+        <div class="why-card reveal">
           <h3 data-i18n="why4_t">No Subscription</h3>
           <p data-i18n="why4_d">Install it once. There's no recurring fee holding your own business records hostage.</p>
         </div>
-        <div class="why-card">
+        <div class="why-card reveal">
           <h3 data-i18n="why5_t">Bilingual Interface</h3>
           <p data-i18n="why5_d">Switch the entire app — including printed documents — between English and Arabic at any time.</p>
         </div>
-        <div class="why-card">
+        <div class="why-card reveal">
           <h3 data-i18n="why6_t">Built for Auto Parts</h3>
           <p data-i18n="why6_d">Vehicle records, part cross-referencing, and workflows shaped around how an auto shop actually runs.</p>
         </div>
@@ -426,9 +528,9 @@
 
   <section class="cta-band" id="contact">
     <div class="container">
-      <h2 data-i18n="cta_h2">Ready to run your shop from one screen?</h2>
-      <p data-i18n="cta_p">Get in touch with RamRam Dev to get set up.</p>
-      <div class="cta-row" style="justify-content:center">
+      <h2 class="reveal" data-i18n="cta_h2">Ready to run your shop from one screen?</h2>
+      <p class="reveal" data-i18n="cta_p">Get in touch with RamRam Dev to get set up.</p>
+      <div class="cta-row reveal" style="justify-content:center">
         <a class="btn btn-primary" style="background:var(--accent);color:#fff" href="https://play.google.com/store/apps/dev?id=4673213010085861192" target="_blank" rel="noopener" data-i18n="cta_btn">Visit Developer Profile</a>
       </div>
     </div>
@@ -740,6 +842,43 @@
     document.getElementById("lightboxClose").addEventListener("click", closeLightbox);
     lightbox.addEventListener("click", function (e) { if (e.target === lightbox) closeLightbox(); });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeLightbox(); });
+
+    /* ---- Motion: staggered scroll-reveal + nav elevation ---- */
+    (function () {
+      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var revealEls = [].slice.call(document.querySelectorAll(".reveal"));
+
+      [".feat-grid", ".shot-grid", ".why-grid"].forEach(function (sel) {
+        var grid = document.querySelector(sel);
+        if (!grid) return;
+        [].slice.call(grid.children).forEach(function (el, i) {
+          if (el.classList.contains("reveal")) {
+            el.style.transitionDelay = Math.min(i * 60, 300) + "ms";
+          }
+        });
+      });
+
+      if (reduce || !("IntersectionObserver" in window)) {
+        revealEls.forEach(function (el) { el.classList.add("in"); });
+      } else {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              e.target.classList.add("in");
+              io.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+        revealEls.forEach(function (el) { io.observe(el); });
+      }
+
+      var topnav = document.querySelector("nav.topnav");
+      if (topnav) {
+        var onScroll = function () { topnav.classList.toggle("scrolled", window.scrollY > 8); };
+        onScroll();
+        window.addEventListener("scroll", onScroll, { passive: true });
+      }
+    })();
   </script>
 
 </body>
