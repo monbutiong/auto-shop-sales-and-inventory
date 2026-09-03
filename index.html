@@ -1,11 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Auto Shop Sales &amp; Inventory System — RamRam Dev</title>
 <meta name="description" content="A complete offline desktop app for auto-parts sales, purchasing, receiving, and inventory management. No subscription, no internet required." />
 <link rel="icon" href="images/login-title.png" />
+<script>
+  /* Set language/direction before first paint to avoid a layout flash. */
+  (function () {
+    try {
+      var nav = (navigator.language || "").toLowerCase();
+      var lang = localStorage.getItem("siteLang") || (nav.indexOf("ar") === 0 ? "ar" : "en");
+      document.documentElement.setAttribute("lang", lang);
+      document.documentElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+    } catch (e) {}
+  })();
+</script>
 <style>
   :root {
     --ink: #1f2430;
@@ -46,6 +57,15 @@
   .navlinks { display: flex; gap: 28px; }
   .navlinks a { color: #c7cff2; font-size: 14px; font-weight: 500; }
   .navlinks a:hover { color: #fff; }
+  .nav-right { display: flex; align-items: center; gap: 14px; }
+  .lang-toggle {
+    background: transparent; color: #c7cff2;
+    border: 1px solid rgba(255,255,255,0.28);
+    padding: 7px 14px; border-radius: 8px;
+    font-size: 13px; font-weight: 600; cursor: pointer;
+    font-family: inherit; line-height: 1; white-space: nowrap;
+  }
+  .lang-toggle:hover { color: #fff; border-color: #fff; }
   .nav-cta {
     background: var(--accent-2); color: #06331f !important; font-weight: 700;
     padding: 9px 18px; border-radius: 8px; font-size: 14px;
@@ -188,6 +208,30 @@
     .feat-grid, .shot-grid { grid-template-columns: 1fr; }
     .hero h1 { font-size: 30px; }
   }
+
+  /* ---- Arabic / RTL ---- */
+  [dir="rtl"] body {
+    font-family: "Cairo", "Segoe UI", Tahoma, "Geeza Pro", "Arabic Typesetting", sans-serif;
+    line-height: 1.75;
+  }
+  [dir="rtl"] .eyebrow,
+  [dir="rtl"] .stat span,
+  [dir="rtl"] .brand span,
+  [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 {
+    letter-spacing: normal;
+  }
+  [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 { line-height: 1.4; }
+  [dir="rtl"] .hero h1 { line-height: 1.35; }
+  [dir="rtl"] .hero p.lead,
+  [dir="rtl"] .section-head p,
+  [dir="rtl"] .feat-card p,
+  [dir="rtl"] .why-card p,
+  [dir="rtl"] .shot-cap span { line-height: 1.9; }
+  [dir="rtl"] .hero-shot { transform: perspective(1200px) rotateY(6deg) rotateX(2deg); }
+  [dir="rtl"] .lightbox-close { right: auto; left: 28px; }
+  @media (max-width: 900px) {
+    [dir="rtl"] .hero-shot { transform: none; }
+  }
 </style>
 </head>
 <body>
@@ -195,43 +239,47 @@
   <nav class="topnav">
     <div class="container">
       <div class="brand">
-        <span>Auto Shop Sales &amp; Inventory System</span>
+        <span data-i18n="brand">Auto Shop Sales &amp; Inventory System</span>
       </div>
       <div class="navlinks">
-        <a href="#features">Features</a>
-        <a href="#screenshots">Screenshots</a>
-        <a href="#why">Why Us</a>
-        <a href="#contact">Contact</a>
+        <a href="#features" data-i18n="nav_features">Features</a>
+        <a href="#screenshots" data-i18n="nav_screenshots">Screenshots</a>
+        <a href="#why" data-i18n="nav_why">Why Us</a>
+        <a href="#contact" data-i18n="nav_contact">Contact</a>
       </div>
-      <a class="nav-cta" href="#contact">Get Started</a>
+      <div class="nav-right">
+        <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch language">العربية</button>
+        <a class="nav-cta" href="#contact" data-i18n="nav_cta">Get Started</a>
+      </div>
     </div>
   </nav>
 
   <header class="hero">
     <div class="container hero-grid">
       <div>
-        <p class="eyebrow">Desktop App · Windows</p>
-        <img class="hero-logo" src="images/login-title.png" alt="Sales &amp; Inventory System" />
-        <h1>Run your auto parts shop from one screen.</h1>
-        <p class="lead">
+        <p class="eyebrow" data-i18n="hero_eyebrow">Desktop App · Windows</p>
+        <img class="hero-logo" src="images/login-title.png" alt="Sales &amp; Inventory System" data-i18n-alt="hero_logo_alt" />
+        <h1 data-i18n="hero_h1">Run your auto parts shop from one screen.</h1>
+        <p class="lead" data-i18n="hero_lead">
           Purchasing, receiving, inventory, sales orders, and reporting — built for auto-parts sellers and repair
           shops. Works fully offline, with no subscription and no internet connection required.
         </p>
         <div class="cta-row">
-          <a class="btn btn-primary" href="#contact">Get Started</a>
-          <a class="btn btn-outline" href="#screenshots">See it in action</a>
+          <a class="btn btn-primary" href="#contact" data-i18n="hero_cta_primary">Get Started</a>
+          <a class="btn btn-outline" href="#screenshots" data-i18n="hero_cta_secondary">See it in action</a>
         </div>
       </div>
       <div>
-        <img class="hero-shot" src="images/ss1.png" alt="Dashboard screenshot" />
+        <img class="hero-shot" src="images/ss1.png" alt="Dashboard screenshot" data-i18n-alt="hero_shot_alt"
+             data-src-en="images/ss1.png" data-src-ar="images/arabic/aa1.png" />
       </div>
     </div>
     <div class="stat-strip">
       <div class="container">
-        <div class="stat"><b>100%</b><span>Offline &amp; Local</span></div>
-        <div class="stat"><b>EN / AR</b><span>Bilingual</span></div>
-        <div class="stat"><b>Multi-User</b><span>Role Permissions</span></div>
-        <div class="stat"><b>0</b><span>Subscription Fees</span></div>
+        <div class="stat"><b>100%</b><span data-i18n="stat1_label">Offline &amp; Local</span></div>
+        <div class="stat"><b data-i18n="stat2_value">EN / AR</b><span data-i18n="stat2_label">Bilingual</span></div>
+        <div class="stat"><b data-i18n="stat3_value">Multi-User</b><span data-i18n="stat3_label">Role Permissions</span></div>
+        <div class="stat"><b>0</b><span data-i18n="stat4_label">Subscription Fees</span></div>
       </div>
     </div>
   </header>
@@ -239,50 +287,50 @@
   <section id="features">
     <div class="container">
       <div class="section-head">
-        <p class="eyebrow">Everything In One Place</p>
-        <h2>Built for the full parts lifecycle</h2>
-        <p>From purchase order to sale, every step is tracked, confirmable, and reversible-by-design — not a spreadsheet held together with formulas.</p>
+        <p class="eyebrow" data-i18n="feat_eyebrow">Everything In One Place</p>
+        <h2 data-i18n="feat_h2">Built for the full parts lifecycle</h2>
+        <p data-i18n="feat_p">From purchase order to sale, every step is tracked, confirmable, and reversible-by-design — not a spreadsheet held together with formulas.</p>
       </div>
       <div class="feat-grid">
         <div class="feat-card">
           <div class="feat-icon">▤</div>
-          <h3>Purchase Orders</h3>
-          <p>Create, approve, and track purchase orders with suppliers, currencies, and revision history.</p>
+          <h3 data-i18n="feat1_t">Purchase Orders</h3>
+          <p data-i18n="feat1_d">Create, approve, and track purchase orders with suppliers, currencies, and revision history.</p>
         </div>
         <div class="feat-card">
           <div class="feat-icon">▥</div>
-          <h3>Goods Receiving</h3>
-          <p>Receive stock against a PO with partial receipts, landed-cost factor, and foreign/local charges.</p>
+          <h3 data-i18n="feat2_t">Goods Receiving</h3>
+          <p data-i18n="feat2_d">Receive stock against a PO with partial receipts, landed-cost factor, and foreign/local charges.</p>
         </div>
         <div class="feat-card">
           <div class="feat-icon">◨</div>
-          <h3>Inventory Tracking</h3>
-          <p>Real-time stock levels, low-stock alerts, and a full movement history for every single item.</p>
+          <h3 data-i18n="feat3_t">Inventory Tracking</h3>
+          <p data-i18n="feat3_d">Real-time stock levels, low-stock alerts, and a full movement history for every single item.</p>
         </div>
         <div class="feat-card">
           <div class="feat-icon">▧</div>
-          <h3>Sales &amp; Quotations</h3>
-          <p>Bilingual quotations and sales orders with custom pricing, discounts, and printable invoices.</p>
+          <h3 data-i18n="feat4_t">Sales &amp; Quotations</h3>
+          <p data-i18n="feat4_d">Bilingual quotations and sales orders with custom pricing, discounts, and printable invoices.</p>
         </div>
         <div class="feat-card">
           <div class="feat-icon">◧</div>
-          <h3>Adjustments &amp; Returns</h3>
-          <p>Correct stock counts and process customer returns, each fully logged against the item's history.</p>
+          <h3 data-i18n="feat5_t">Adjustments &amp; Returns</h3>
+          <p data-i18n="feat5_d">Correct stock counts and process customer returns, each fully logged against the item's history.</p>
         </div>
         <div class="feat-card">
           <div class="feat-icon">▦</div>
-          <h3>Reports &amp; Exports</h3>
-          <p>Purchase, sales, and inventory reports with item-level detail and one-click Excel export.</p>
+          <h3 data-i18n="feat6_t">Reports &amp; Exports</h3>
+          <p data-i18n="feat6_d">Purchase, sales, and inventory reports with item-level detail and one-click Excel export.</p>
         </div>
         <div class="feat-card">
           <div class="feat-icon">◫</div>
-          <h3>Roles &amp; Permissions</h3>
-          <p>Give every staff member exactly the access they need — down to individual page actions.</p>
+          <h3 data-i18n="feat7_t">Roles &amp; Permissions</h3>
+          <p data-i18n="feat7_d">Give every staff member exactly the access they need — down to individual page actions.</p>
         </div>
         <div class="feat-card">
           <div class="feat-icon">◩</div>
-          <h3>Activity Log</h3>
-          <p>Every create, edit, and confirm action is recorded — who did what, and when.</p>
+          <h3 data-i18n="feat8_t">Activity Log</h3>
+          <p data-i18n="feat8_d">Every create, edit, and confirm action is recorded — who did what, and when.</p>
         </div>
       </div>
     </div>
@@ -291,50 +339,50 @@
   <section id="screenshots" class="shots-wrap">
     <div class="container">
       <div class="section-head">
-        <p class="eyebrow">A Closer Look</p>
-        <h2>See the app in action</h2>
-        <p>Real screens from the actual application — click any screenshot to enlarge.</p>
+        <p class="eyebrow" data-i18n="shots_eyebrow">A Closer Look</p>
+        <h2 data-i18n="shots_h2">See the app in action</h2>
+        <p data-i18n="shots_p">Real screens from the actual application — click any screenshot to enlarge.</p>
       </div>
       <div class="shot-grid" id="shotGrid">
-        <div class="shot-card" data-full="images/ss1.png">
-          <div class="shot-img-wrap"><img src="images/ss1.png" alt="Dashboard" /></div>
-          <div class="shot-cap"><b>Dashboard</b><span>KPIs, low stock, and sales trends at a glance</span></div>
+        <div class="shot-card" data-full-en="images/ss1.png" data-full-ar="images/arabic/aa1.png">
+          <div class="shot-img-wrap"><img src="images/ss1.png" alt="Dashboard" data-i18n-alt="shot1_title" data-src-en="images/ss1.png" data-src-ar="images/arabic/aa1.png" /></div>
+          <div class="shot-cap"><b data-i18n="shot1_title">Dashboard</b><span data-i18n="shot1_desc">KPIs, low stock, and sales trends at a glance</span></div>
         </div>
-        <div class="shot-card" data-full="images/ss2.png">
-          <div class="shot-img-wrap"><img src="images/ss2.png" alt="New Purchase Order" /></div>
-          <div class="shot-cap"><b>Purchase Orders</b><span>Create and price a new order to a supplier</span></div>
+        <div class="shot-card" data-full-en="images/ss2.png" data-full-ar="images/arabic/aa2.png">
+          <div class="shot-img-wrap"><img src="images/ss2.png" alt="New Purchase Order" data-i18n-alt="shot2_title" data-src-en="images/ss2.png" data-src-ar="images/arabic/aa2.png" /></div>
+          <div class="shot-cap"><b data-i18n="shot2_title">Purchase Orders</b><span data-i18n="shot2_desc">Create and price a new order to a supplier</span></div>
         </div>
-        <div class="shot-card" data-full="images/ss3.png">
-          <div class="shot-img-wrap"><img src="images/ss3.png" alt="Create GRV" /></div>
-          <div class="shot-cap"><b>Goods Receiving</b><span>Receive items against an open purchase order</span></div>
+        <div class="shot-card" data-full-en="images/ss3.png" data-full-ar="images/arabic/aa3.png">
+          <div class="shot-img-wrap"><img src="images/ss3.png" alt="Create GRV" data-i18n-alt="shot3_title" data-src-en="images/ss3.png" data-src-ar="images/arabic/aa3.png" /></div>
+          <div class="shot-cap"><b data-i18n="shot3_title">Goods Receiving</b><span data-i18n="shot3_desc">Receive items against an open purchase order</span></div>
         </div>
-        <div class="shot-card" data-full="images/ss4.png">
-          <div class="shot-img-wrap"><img src="images/ss4.png" alt="Item Masterlist" /></div>
-          <div class="shot-cap"><b>Item Masterlist</b><span>Every part, its cost, retail price, and stock</span></div>
+        <div class="shot-card" data-full-en="images/ss4.png" data-full-ar="images/arabic/aa4.png">
+          <div class="shot-img-wrap"><img src="images/ss4.png" alt="Item Masterlist" data-i18n-alt="shot4_title" data-src-en="images/ss4.png" data-src-ar="images/arabic/aa4.png" /></div>
+          <div class="shot-cap"><b data-i18n="shot4_title">Item Masterlist</b><span data-i18n="shot4_desc">Every part, its cost, retail price, and stock</span></div>
         </div>
-        <div class="shot-card" data-full="images/ss6.png">
-          <div class="shot-img-wrap"><img src="images/ss6.png" alt="New Sales Order" /></div>
-          <div class="shot-cap"><b>Sales Orders</b><span>Custom pricing and discounts, line by line</span></div>
+        <div class="shot-card" data-full-en="images/ss6.png" data-full-ar="images/arabic/aa6.png">
+          <div class="shot-img-wrap"><img src="images/ss6.png" alt="New Sales Order" data-i18n-alt="shot5_title" data-src-en="images/ss6.png" data-src-ar="images/arabic/aa6.png" /></div>
+          <div class="shot-cap"><b data-i18n="shot5_title">Sales Orders</b><span data-i18n="shot5_desc">Custom pricing and discounts, line by line</span></div>
         </div>
-        <div class="shot-card" data-full="images/ss7.png">
-          <div class="shot-img-wrap"><img src="images/ss7.png" alt="Sales Invoice" /></div>
-          <div class="shot-cap"><b>Bilingual Invoices</b><span>Print-ready documents in English and Arabic</span></div>
+        <div class="shot-card" data-full-en="images/ss7.png" data-full-ar="images/arabic/aa7.png">
+          <div class="shot-img-wrap"><img src="images/ss7.png" alt="Sales Invoice" data-i18n-alt="shot6_title" data-src-en="images/ss7.png" data-src-ar="images/arabic/aa7.png" /></div>
+          <div class="shot-cap"><b data-i18n="shot6_title">Bilingual Invoices</b><span data-i18n="shot6_desc">Print-ready documents in English and Arabic</span></div>
         </div>
-        <div class="shot-card" data-full="images/ss5.png">
-          <div class="shot-img-wrap"><img src="images/ss5.png" alt="Quotation" /></div>
-          <div class="shot-cap"><b>Quotations</b><span>Quote a customer, then convert straight to a sale</span></div>
+        <div class="shot-card" data-full-en="images/ss5.png" data-full-ar="images/arabic/aa5.png">
+          <div class="shot-img-wrap"><img src="images/ss5.png" alt="Quotation" data-i18n-alt="shot7_title" data-src-en="images/ss5.png" data-src-ar="images/arabic/aa5.png" /></div>
+          <div class="shot-cap"><b data-i18n="shot7_title">Quotations</b><span data-i18n="shot7_desc">Quote a customer, then convert straight to a sale</span></div>
         </div>
-        <div class="shot-card" data-full="images/ss8.png">
-          <div class="shot-img-wrap"><img src="images/ss8.png" alt="Permissions" /></div>
-          <div class="shot-cap"><b>Roles &amp; Permissions</b><span>Fine-grained access control per staff role</span></div>
+        <div class="shot-card" data-full-en="images/ss8.png" data-full-ar="images/ss8.png">
+          <div class="shot-img-wrap"><img src="images/ss8.png" alt="Permissions" data-i18n-alt="shot8_title" data-src-en="images/ss8.png" data-src-ar="images/ss8.png" /></div>
+          <div class="shot-cap"><b data-i18n="shot8_title">Roles &amp; Permissions</b><span data-i18n="shot8_desc">Fine-grained access control per staff role</span></div>
         </div>
-        <div class="shot-card" data-full="images/ss9.png">
-          <div class="shot-img-wrap"><img src="images/ss9.png" alt="Activity Log" /></div>
-          <div class="shot-cap"><b>Activity Log</b><span>A full audit trail of every action taken</span></div>
+        <div class="shot-card" data-full-en="images/ss9.png" data-full-ar="images/arabic/aa8.png">
+          <div class="shot-img-wrap"><img src="images/ss9.png" alt="Activity Log" data-i18n-alt="shot9_title" data-src-en="images/ss9.png" data-src-ar="images/arabic/aa8.png" /></div>
+          <div class="shot-cap"><b data-i18n="shot9_title">Activity Log</b><span data-i18n="shot9_desc">A full audit trail of every action taken</span></div>
         </div>
-        <div class="shot-card" data-full="images/ss10.png">
-          <div class="shot-img-wrap"><img src="images/ss10.png" alt="Movement History" /></div>
-          <div class="shot-cap"><b>Movement History</b><span>Trace exactly how a part's stock level changed</span></div>
+        <div class="shot-card" data-full-en="images/ss10.png" data-full-ar="images/arabic/aa9.png">
+          <div class="shot-img-wrap"><img src="images/ss10.png" alt="Movement History" data-i18n-alt="shot10_title" data-src-en="images/ss10.png" data-src-ar="images/arabic/aa9.png" /></div>
+          <div class="shot-cap"><b data-i18n="shot10_title">Movement History</b><span data-i18n="shot10_desc">Trace exactly how a part's stock level changed</span></div>
         </div>
       </div>
     </div>
@@ -343,34 +391,34 @@
   <section id="why" class="why">
     <div class="container">
       <div class="section-head">
-        <p class="eyebrow">Why This App</p>
-        <h2>Your data stays yours</h2>
-        <p>No cloud account, no monthly fee, and nothing leaves your computer unless you export it yourself.</p>
+        <p class="eyebrow" data-i18n="why_eyebrow">Why This App</p>
+        <h2 data-i18n="why_h2">Your data stays yours</h2>
+        <p data-i18n="why_p">No cloud account, no monthly fee, and nothing leaves your computer unless you export it yourself.</p>
       </div>
       <div class="why-grid">
         <div class="why-card">
-          <h3>Fully Offline</h3>
-          <p>Everything runs locally — no internet connection is required to use any feature of the app, ever.</p>
+          <h3 data-i18n="why1_t">Fully Offline</h3>
+          <p data-i18n="why1_d">Everything runs locally — no internet connection is required to use any feature of the app, ever.</p>
         </div>
         <div class="why-card">
-          <h3>Private By Design</h3>
-          <p>Your business data is stored locally in your own database file. Nothing is transmitted to us or anyone else.</p>
+          <h3 data-i18n="why2_t">Private By Design</h3>
+          <p data-i18n="why2_d">Your business data is stored locally in your own database file. Nothing is transmitted to us or anyone else.</p>
         </div>
         <div class="why-card">
-          <h3>Multi-PC Ready</h3>
-          <p>Optionally share one database across several PCs on the same shop network — no cloud subscription needed.</p>
+          <h3 data-i18n="why3_t">Multi-PC Ready</h3>
+          <p data-i18n="why3_d">Optionally share one database across several PCs on the same shop network — no cloud subscription needed.</p>
         </div>
         <div class="why-card">
-          <h3>No Subscription</h3>
-          <p>Install it once. There's no recurring fee holding your own business records hostage.</p>
+          <h3 data-i18n="why4_t">No Subscription</h3>
+          <p data-i18n="why4_d">Install it once. There's no recurring fee holding your own business records hostage.</p>
         </div>
         <div class="why-card">
-          <h3>Bilingual Interface</h3>
-          <p>Switch the entire app — including printed documents — between English and Arabic at any time.</p>
+          <h3 data-i18n="why5_t">Bilingual Interface</h3>
+          <p data-i18n="why5_d">Switch the entire app — including printed documents — between English and Arabic at any time.</p>
         </div>
         <div class="why-card">
-          <h3>Built for Auto Parts</h3>
-          <p>Vehicle records, part cross-referencing, and workflows shaped around how an auto shop actually runs.</p>
+          <h3 data-i18n="why6_t">Built for Auto Parts</h3>
+          <p data-i18n="why6_d">Vehicle records, part cross-referencing, and workflows shaped around how an auto shop actually runs.</p>
         </div>
       </div>
     </div>
@@ -378,10 +426,10 @@
 
   <section class="cta-band" id="contact">
     <div class="container">
-      <h2>Ready to run your shop from one screen?</h2>
-      <p>Get in touch with RamRam Dev to get set up.</p>
+      <h2 data-i18n="cta_h2">Ready to run your shop from one screen?</h2>
+      <p data-i18n="cta_p">Get in touch with RamRam Dev to get set up.</p>
       <div class="cta-row" style="justify-content:center">
-        <a class="btn btn-primary" style="background:var(--accent);color:#fff" href="https://play.google.com/store/apps/dev?id=4673213010085861192" target="_blank" rel="noopener">Visit Developer Profile</a>
+        <a class="btn btn-primary" style="background:var(--accent);color:#fff" href="https://play.google.com/store/apps/dev?id=4673213010085861192" target="_blank" rel="noopener" data-i18n="cta_btn">Visit Developer Profile</a>
       </div>
     </div>
   </section>
@@ -390,37 +438,308 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <img class="footer-badge" src="images/bottom-developed-by.png" alt="Developed by RamRam Dev" />
+          <img class="footer-badge" src="images/bottom-developed-by.png" alt="Developed by RamRam Dev" data-i18n-alt="footer_badge_alt" />
         </div>
         <div class="footer-links">
-          <a href="https://monbutiong.github.io/privacy-policy/auto-shop-sales-and-inventory.html" target="_blank" rel="noopener">Privacy Policy</a>
-          <a href="https://play.google.com/store/apps/dev?id=4673213010085861192" target="_blank" rel="noopener">Developer Profile</a>
-          <a href="#features">Features</a>
-          <a href="#screenshots">Screenshots</a>
+          <a href="https://monbutiong.github.io/privacy-policy/auto-shop-sales-and-inventory.html" target="_blank" rel="noopener" data-i18n="foot_privacy">Privacy Policy</a>
+          <a href="https://play.google.com/store/apps/dev?id=4673213010085861192" target="_blank" rel="noopener" data-i18n="foot_devprofile">Developer Profile</a>
+          <a href="#features" data-i18n="nav_features">Features</a>
+          <a href="#screenshots" data-i18n="nav_screenshots">Screenshots</a>
         </div>
       </div>
-      <div class="footer-bottom">© 2026 RamRam Dev — Auto Shop Sales &amp; Inventory System. All rights reserved.</div>
+      <div class="footer-bottom" data-i18n="foot_copy">© 2026 RamRam Dev — Auto Shop Sales &amp; Inventory System. All rights reserved.</div>
     </div>
   </footer>
 
   <div class="lightbox" id="lightbox">
-    <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
-    <img id="lightboxImg" src="" alt="Enlarged screenshot" />
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close" data-i18n-aria="lightbox_close">&times;</button>
+    <img id="lightboxImg" src="" alt="Enlarged screenshot" data-i18n-alt="lightbox_alt" />
   </div>
 
   <script>
-    var lightbox = document.getElementById('lightbox');
-    var lightboxImg = document.getElementById('lightboxImg');
-    document.getElementById('shotGrid').addEventListener('click', function (e) {
-      var card = e.target.closest('.shot-card');
-      if (!card) return;
-      lightboxImg.src = card.getAttribute('data-full');
-      lightbox.classList.add('open');
+    var I18N = {
+      en: {
+        page_title: "Auto Shop Sales & Inventory System — RamRam Dev",
+        page_desc: "A complete offline desktop app for auto-parts sales, purchasing, receiving, and inventory management. No subscription, no internet required.",
+        lang_name: "العربية",
+
+        brand: "Auto Shop Sales & Inventory System",
+        nav_features: "Features",
+        nav_screenshots: "Screenshots",
+        nav_why: "Why Us",
+        nav_contact: "Contact",
+        nav_cta: "Get Started",
+
+        hero_eyebrow: "Desktop App · Windows",
+        hero_logo_alt: "Sales & Inventory System",
+        hero_h1: "Run your auto parts shop from one screen.",
+        hero_lead: "Purchasing, receiving, inventory, sales orders, and reporting — built for auto-parts sellers and repair shops. Works fully offline, with no subscription and no internet connection required.",
+        hero_cta_primary: "Get Started",
+        hero_cta_secondary: "See it in action",
+        hero_shot_alt: "Dashboard screenshot",
+
+        stat1_label: "Offline & Local",
+        stat2_value: "EN / AR",
+        stat2_label: "Bilingual",
+        stat3_value: "Multi-User",
+        stat3_label: "Role Permissions",
+        stat4_label: "Subscription Fees",
+
+        feat_eyebrow: "Everything In One Place",
+        feat_h2: "Built for the full parts lifecycle",
+        feat_p: "From purchase order to sale, every step is tracked, confirmable, and reversible-by-design — not a spreadsheet held together with formulas.",
+        feat1_t: "Purchase Orders",
+        feat1_d: "Create, approve, and track purchase orders with suppliers, currencies, and revision history.",
+        feat2_t: "Goods Receiving",
+        feat2_d: "Receive stock against a PO with partial receipts, landed-cost factor, and foreign/local charges.",
+        feat3_t: "Inventory Tracking",
+        feat3_d: "Real-time stock levels, low-stock alerts, and a full movement history for every single item.",
+        feat4_t: "Sales & Quotations",
+        feat4_d: "Bilingual quotations and sales orders with custom pricing, discounts, and printable invoices.",
+        feat5_t: "Adjustments & Returns",
+        feat5_d: "Correct stock counts and process customer returns, each fully logged against the item's history.",
+        feat6_t: "Reports & Exports",
+        feat6_d: "Purchase, sales, and inventory reports with item-level detail and one-click Excel export.",
+        feat7_t: "Roles & Permissions",
+        feat7_d: "Give every staff member exactly the access they need — down to individual page actions.",
+        feat8_t: "Activity Log",
+        feat8_d: "Every create, edit, and confirm action is recorded — who did what, and when.",
+
+        shots_eyebrow: "A Closer Look",
+        shots_h2: "See the app in action",
+        shots_p: "Real screens from the actual application — click any screenshot to enlarge.",
+        shot1_title: "Dashboard",
+        shot1_desc: "KPIs, low stock, and sales trends at a glance",
+        shot2_title: "Purchase Orders",
+        shot2_desc: "Create and price a new order to a supplier",
+        shot3_title: "Goods Receiving",
+        shot3_desc: "Receive items against an open purchase order",
+        shot4_title: "Item Masterlist",
+        shot4_desc: "Every part, its cost, retail price, and stock",
+        shot5_title: "Sales Orders",
+        shot5_desc: "Custom pricing and discounts, line by line",
+        shot6_title: "Bilingual Invoices",
+        shot6_desc: "Print-ready documents in English and Arabic",
+        shot7_title: "Quotations",
+        shot7_desc: "Quote a customer, then convert straight to a sale",
+        shot8_title: "Roles & Permissions",
+        shot8_desc: "Fine-grained access control per staff role",
+        shot9_title: "Activity Log",
+        shot9_desc: "A full audit trail of every action taken",
+        shot10_title: "Movement History",
+        shot10_desc: "Trace exactly how a part's stock level changed",
+
+        why_eyebrow: "Why This App",
+        why_h2: "Your data stays yours",
+        why_p: "No cloud account, no monthly fee, and nothing leaves your computer unless you export it yourself.",
+        why1_t: "Fully Offline",
+        why1_d: "Everything runs locally — no internet connection is required to use any feature of the app, ever.",
+        why2_t: "Private By Design",
+        why2_d: "Your business data is stored locally in your own database file. Nothing is transmitted to us or anyone else.",
+        why3_t: "Multi-PC Ready",
+        why3_d: "Optionally share one database across several PCs on the same shop network — no cloud subscription needed.",
+        why4_t: "No Subscription",
+        why4_d: "Install it once. There's no recurring fee holding your own business records hostage.",
+        why5_t: "Bilingual Interface",
+        why5_d: "Switch the entire app — including printed documents — between English and Arabic at any time.",
+        why6_t: "Built for Auto Parts",
+        why6_d: "Vehicle records, part cross-referencing, and workflows shaped around how an auto shop actually runs.",
+
+        cta_h2: "Ready to run your shop from one screen?",
+        cta_p: "Get in touch with RamRam Dev to get set up.",
+        cta_btn: "Visit Developer Profile",
+
+        footer_badge_alt: "Developed by RamRam Dev",
+        foot_privacy: "Privacy Policy",
+        foot_devprofile: "Developer Profile",
+        foot_copy: "© 2026 RamRam Dev — Auto Shop Sales & Inventory System. All rights reserved.",
+
+        lightbox_close: "Close",
+        lightbox_alt: "Enlarged screenshot"
+      },
+      ar: {
+        page_title: "نظام Auto Shop للمبيعات والمخزون — RamRam Dev",
+        page_desc: "تطبيق مكتبي متكامل يعمل دون إنترنت لإدارة مبيعات قطع غيار السيارات والشراء والاستلام والمخزون. بلا اشتراك ودون حاجة إلى إنترنت.",
+        lang_name: "English",
+
+        brand: "نظام Auto Shop للمبيعات والمخزون",
+        nav_features: "المميزات",
+        nav_screenshots: "لقطات الشاشة",
+        nav_why: "لماذا نحن",
+        nav_contact: "تواصل معنا",
+        nav_cta: "ابدأ الآن",
+
+        hero_eyebrow: "تطبيق سطح المكتب · ويندوز",
+        hero_logo_alt: "نظام المبيعات والمخزون",
+        hero_h1: "أدِر محل قطع غيار سيارتك من شاشة واحدة.",
+        hero_lead: "المشتريات والاستلام والمخزون وأوامر البيع والتقارير — مصمَّم لبائعي قطع غيار السيارات وورش الإصلاح. يعمل دون اتصال بالإنترنت تمامًا، بلا اشتراك ودون الحاجة إلى إنترنت.",
+        hero_cta_primary: "ابدأ الآن",
+        hero_cta_secondary: "شاهده أثناء العمل",
+        hero_shot_alt: "لقطة شاشة للوحة التحكم",
+
+        stat1_label: "محلي ودون إنترنت",
+        stat2_value: "عربي / إنجليزي",
+        stat2_label: "ثنائي اللغة",
+        stat3_value: "متعدد المستخدمين",
+        stat3_label: "صلاحيات حسب الدور",
+        stat4_label: "رسوم الاشتراك",
+
+        feat_eyebrow: "كل شيء في مكان واحد",
+        feat_h2: "مصمَّم لدورة حياة القطعة بالكامل",
+        feat_p: "من أمر الشراء إلى البيع، تُتابَع كل خطوة وتُؤكَّد، وهي قابلة للتراجع بحكم التصميم — لا جدول بيانات تشدّه المعادلات.",
+        feat1_t: "أوامر الشراء",
+        feat1_d: "أنشئ أوامر الشراء واعتمدها وتابِعها مع الموردين والعملات وسجل المراجعات.",
+        feat2_t: "استلام البضائع",
+        feat2_d: "استلم المخزون مقابل أمر شراء مع استلام جزئي، ومعامل التكلفة حتى الوصول، ورسوم أجنبية ومحلية.",
+        feat3_t: "تتبّع المخزون",
+        feat3_d: "مستويات مخزون فورية، وتنبيهات لانخفاض المخزون، وسجل حركة كامل لكل صنف.",
+        feat4_t: "المبيعات وعروض الأسعار",
+        feat4_d: "عروض أسعار وأوامر بيع ثنائية اللغة مع تسعير مخصص وخصومات وفواتير قابلة للطباعة.",
+        feat5_t: "التسويات والمرتجعات",
+        feat5_d: "صحِّح أعداد المخزون وعالِج مرتجعات العملاء، وكلٌّ منها مُسجَّل بالكامل في سجل الصنف.",
+        feat6_t: "التقارير والتصدير",
+        feat6_d: "تقارير المشتريات والمبيعات والمخزون بتفاصيل على مستوى الصنف وتصدير إلى Excel بنقرة واحدة.",
+        feat7_t: "الأدوار والصلاحيات",
+        feat7_d: "امنح كل موظف الصلاحيات التي يحتاجها بالضبط — حتى مستوى إجراءات كل صفحة.",
+        feat8_t: "سجل النشاط",
+        feat8_d: "تُسجَّل كل عملية إنشاء وتعديل وتأكيد — مَن فعل ماذا ومتى.",
+
+        shots_eyebrow: "نظرة أقرب",
+        shots_h2: "شاهد التطبيق أثناء العمل",
+        shots_p: "شاشات حقيقية من التطبيق الفعلي — انقر على أي لقطة لتكبيرها.",
+        shot1_title: "لوحة التحكم",
+        shot1_desc: "المؤشرات ونقص المخزون واتجاهات المبيعات في لمحة",
+        shot2_title: "أوامر الشراء",
+        shot2_desc: "أنشئ أمرًا جديدًا لأحد الموردين وسعِّره",
+        shot3_title: "استلام البضائع",
+        shot3_desc: "استلم الأصناف مقابل أمر شراء مفتوح",
+        shot4_title: "قائمة الأصناف",
+        shot4_desc: "كل قطعة وتكلفتها وسعر بيعها ورصيدها",
+        shot5_title: "أوامر البيع",
+        shot5_desc: "تسعير مخصص وخصومات، سطرًا بسطر",
+        shot6_title: "فواتير ثنائية اللغة",
+        shot6_desc: "مستندات جاهزة للطباعة بالعربية والإنجليزية",
+        shot7_title: "عروض الأسعار",
+        shot7_desc: "قدِّم عرض سعر للعميل ثم حوِّله مباشرة إلى بيع",
+        shot8_title: "الأدوار والصلاحيات",
+        shot8_desc: "تحكُّم دقيق في الوصول حسب دور كل موظف",
+        shot9_title: "سجل النشاط",
+        shot9_desc: "مسار تدقيق كامل لكل إجراء تم اتخاذه",
+        shot10_title: "سجل الحركة",
+        shot10_desc: "تتبَّع بدقّة كيف تغيّر رصيد مخزون القطعة",
+
+        why_eyebrow: "لماذا هذا التطبيق",
+        why_h2: "بياناتك تبقى ملكك",
+        why_p: "لا حساب سحابي، ولا رسوم شهرية، ولا شيء يغادر جهازك إلا إذا صدّرته بنفسك.",
+        why1_t: "يعمل دون إنترنت تمامًا",
+        why1_d: "كل شيء يعمل محليًا — لا حاجة إلى اتصال بالإنترنت لاستخدام أي ميزة في التطبيق، إطلاقًا.",
+        why2_t: "خصوصية بحكم التصميم",
+        why2_d: "تُخزَّن بيانات عملك محليًا في ملف قاعدة بيانات خاص بك، ولا يُرسَل شيء إلينا أو إلى أي جهة أخرى.",
+        why3_t: "جاهز للعمل على عدة أجهزة",
+        why3_d: "شارِك — اختياريًا — قاعدة بيانات واحدة بين عدة أجهزة على شبكة المحل نفسها، دون الحاجة إلى اشتراك سحابي.",
+        why4_t: "بلا اشتراك",
+        why4_d: "ثبِّته مرة واحدة. لا رسوم متكررة تحتجز سجلات عملك.",
+        why5_t: "واجهة ثنائية اللغة",
+        why5_d: "بدِّل التطبيق بالكامل — بما في ذلك المستندات المطبوعة — بين الإنجليزية والعربية في أي وقت.",
+        why6_t: "مصمَّم لقطع غيار السيارات",
+        why6_d: "سجلات المركبات، والربط بين القطع المتوافقة، وسير عمل مبني على طريقة عمل محل قطع الغيار فعليًا.",
+
+        cta_h2: "جاهز لإدارة محلك من شاشة واحدة؟",
+        cta_p: "تواصل مع RamRam Dev للبدء.",
+        cta_btn: "زيارة ملف المطوِّر",
+
+        footer_badge_alt: "تطوير RamRam Dev",
+        foot_privacy: "سياسة الخصوصية",
+        foot_devprofile: "ملف المطوِّر",
+        foot_copy: "© 2026 RamRam Dev — نظام Auto Shop للمبيعات والمخزون. جميع الحقوق محفوظة.",
+
+        lightbox_close: "إغلاق",
+        lightbox_alt: "لقطة شاشة مكبَّرة"
+      }
+    };
+
+    var currentLang = "en";
+
+    function ensureArabicFont() {
+      if (document.getElementById("arFont")) return;
+      var pc1 = document.createElement("link");
+      pc1.rel = "preconnect"; pc1.href = "https://fonts.googleapis.com";
+      var pc2 = document.createElement("link");
+      pc2.rel = "preconnect"; pc2.href = "https://fonts.gstatic.com"; pc2.crossOrigin = "anonymous";
+      var css = document.createElement("link");
+      css.id = "arFont"; css.rel = "stylesheet";
+      css.href = "https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap";
+      document.head.appendChild(pc1);
+      document.head.appendChild(pc2);
+      document.head.appendChild(css);
+    }
+
+    function applyLang(lang) {
+      var d = I18N[lang] || I18N.en;
+      currentLang = I18N[lang] ? lang : "en";
+
+      var html = document.documentElement;
+      html.setAttribute("lang", currentLang);
+      html.setAttribute("dir", currentLang === "ar" ? "rtl" : "ltr");
+
+      if (currentLang === "ar") ensureArabicFont();
+
+      document.title = d.page_title;
+      var md = document.querySelector('meta[name="description"]');
+      if (md) md.setAttribute("content", d.page_desc);
+
+      document.querySelectorAll("[data-i18n]").forEach(function (el) {
+        var k = el.getAttribute("data-i18n");
+        if (d[k] != null) el.textContent = d[k];
+      });
+      document.querySelectorAll("[data-i18n-alt]").forEach(function (el) {
+        var k = el.getAttribute("data-i18n-alt");
+        if (d[k] != null) el.setAttribute("alt", d[k]);
+      });
+      document.querySelectorAll("[data-i18n-aria]").forEach(function (el) {
+        var k = el.getAttribute("data-i18n-aria");
+        if (d[k] != null) el.setAttribute("aria-label", d[k]);
+      });
+
+      var srcAttr = currentLang === "ar" ? "data-src-ar" : "data-src-en";
+      var fullAttr = currentLang === "ar" ? "data-full-ar" : "data-full-en";
+      document.querySelectorAll("img[" + srcAttr + "]").forEach(function (img) {
+        var s = img.getAttribute(srcAttr);
+        if (s) img.setAttribute("src", s);
+      });
+      document.querySelectorAll(".shot-card[" + fullAttr + "]").forEach(function (card) {
+        card.setAttribute("data-full", card.getAttribute(fullAttr));
+      });
+
+      var toggle = document.getElementById("langToggle");
+      if (toggle) toggle.textContent = d.lang_name;
+
+      try { localStorage.setItem("siteLang", currentLang); } catch (e) {}
+    }
+
+    (function init() {
+      var stored;
+      try { stored = localStorage.getItem("siteLang"); } catch (e) {}
+      var nav = (navigator.language || "").toLowerCase();
+      applyLang(stored || (nav.indexOf("ar") === 0 ? "ar" : "en"));
+    })();
+
+    document.getElementById("langToggle").addEventListener("click", function () {
+      applyLang(currentLang === "ar" ? "en" : "ar");
     });
-    function closeLightbox() { lightbox.classList.remove('open'); lightboxImg.src = ''; }
-    document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLightbox(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeLightbox(); });
+
+    var lightbox = document.getElementById("lightbox");
+    var lightboxImg = document.getElementById("lightboxImg");
+    document.getElementById("shotGrid").addEventListener("click", function (e) {
+      var card = e.target.closest(".shot-card");
+      if (!card) return;
+      lightboxImg.src = card.getAttribute("data-full");
+      lightbox.classList.add("open");
+    });
+    function closeLightbox() { lightbox.classList.remove("open"); lightboxImg.src = ""; }
+    document.getElementById("lightboxClose").addEventListener("click", closeLightbox);
+    lightbox.addEventListener("click", function (e) { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeLightbox(); });
   </script>
 
 </body>
